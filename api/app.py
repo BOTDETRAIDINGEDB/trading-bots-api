@@ -6,6 +6,7 @@ import sys
 import logging
 from datetime import datetime
 from dotenv import load_dotenv
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Configurar logging
 logging.basicConfig(
@@ -50,6 +51,11 @@ except Exception as e:
 
 # Inicializar Flask
 app = Flask(__name__)
+
+# Configurar ProxyFix para manejar correctamente las solicitudes a través de proxy
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
+# Configurar CORS
 CORS(app, resources={r"/api/*": {"origins": config.get('allowed_origins', ['*'])}})
 
 # Registrar middleware
@@ -108,6 +114,11 @@ def not_found(e):
 if __name__ == '__main__':
     # Registrar tiempo de inicio
     os.environ['API_START_TIME'] = datetime.now().isoformat()
+    
+    # Detectar si estamos detrás de un proxy
+    behind_proxy = os.getenv('BEHIND_PROXY', 'false').lower() == 'true'
+    if behind_proxy:
+        logger.info("API configurada para ejecutarse detrás de un proxy inverso")
     
     # Usar variables de entorno con valores de config.json como respaldo
     host = os.getenv('API_HOST', config.get('host', '0.0.0.0'))
