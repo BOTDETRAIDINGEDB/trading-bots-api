@@ -90,6 +90,20 @@ La API está disponible en:
 https://tradebotscentral.com/api/health
 ```
 
+### Gestión de Tokens JWT
+
+Para generar un nuevo token JWT (necesario para autenticación):
+
+```bash
+# Generar un nuevo token JWT
+python3 scripts/generate_jwt.py
+
+# El token se guarda automáticamente en auth_config.json
+# y expira después de 24 horas por defecto
+```
+
+Si el token expira, simplemente ejecuta el comando anterior para generar uno nuevo.
+
 ### Acceso desde Aplicaciones Externas
 
 La API puede ser accedida desde cualquier aplicación externa a través de HTTPS:
