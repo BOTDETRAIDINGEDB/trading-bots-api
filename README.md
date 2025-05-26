@@ -161,6 +161,8 @@ Esto permite integrar la API con:
 - `GET /api/bots/{bot_id}`: Obtiene información detallada de un bot
 - `POST /api/bots/{bot_id}/start`: Inicia un bot
 - `POST /api/bots/{bot_id}/stop`: Detiene un bot
+- `GET /api/bots/{bot_id}/signals`: Obtiene las señales recientes generadas por el bot
+- `GET /api/bots/{bot_id}/positions`: Obtiene las posiciones actualmente abiertas por el bot
 
 #### Webhooks
 
