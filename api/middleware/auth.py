@@ -47,7 +47,7 @@ def auth_middleware():
     
     try:
         # Verificar y decodificar el token
-        secret_key = os.getenv('JWT_SECRET_KEY', 'default_secret_key')
+        secret_key = os.getenv('JWT_SECRET', 'default_secret_key')
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
         
         # Verificar expiración (opcional, JWT ya lo hace por defecto)
