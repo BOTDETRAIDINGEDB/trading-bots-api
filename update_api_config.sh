@@ -50,18 +50,18 @@ if [ -f "$ENV_FILE" ]; then
     if grep -q "SOL_BOT_PATH" "$ENV_FILE"; then
         echo -e "${YELLOW}La configuración para SOL_BOT ya existe. Actualizando...${NC}"
         # Actualizar las rutas existentes
-        sed -i '/SOL_BOT_PATH/c\SOL_BOT_PATH='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_20m' "$ENV_FILE"
-        sed -i '/SOL_BOT_LOG/c\SOL_BOT_LOG='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min.log' "$ENV_FILE"
-        sed -i '/SOL_BOT_STATE/c\SOL_BOT_STATE='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min_state.json' "$ENV_FILE"
+        sed -i '/SOL_BOT_PATH/c\SOL_BOT_PATH='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_15m' "$ENV_FILE"
+        sed -i '/SOL_BOT_LOG/c\SOL_BOT_LOG='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min.log' "$ENV_FILE"
+        sed -i '/SOL_BOT_STATE/c\SOL_BOT_STATE='"$BASE_DIR"'/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min_state.json' "$ENV_FILE"
     else
         echo -e "${YELLOW}Añadiendo configuración para SOL_BOT...${NC}"
         # Añadir nuevas configuraciones al final del archivo
         cat >> "$ENV_FILE" << EOF
 
 # Configuración para el bot SOL con reentrenamiento
-SOL_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m
-SOL_BOT_LOG=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min.log
-SOL_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min_state.json
+SOL_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m
+SOL_BOT_LOG=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min.log
+SOL_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min_state.json
 EOF
     fi
 else
@@ -88,9 +88,9 @@ XRP_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/xrp_bot/bot_state_xrp_30m
 XRP_BOT_SIMULATION=$BASE_DIR/new-trading-bots/src/spot_bots/xrp_bot/simulation_state_xrp_30m.json
 
 # Configuración para el bot SOL con reentrenamiento
-SOL_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m
-SOL_BOT_LOG=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min.log
-SOL_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_20m/sol_bot_20min_state.json
+SOL_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m
+SOL_BOT_LOG=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min.log
+SOL_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min_state.json
 
 # Notification Settings
 TELEGRAM_BOT_TOKEN=your_telegram_token_here
@@ -114,7 +114,7 @@ if [ -f "$CONFIG_FILE" ]; then
     else
         echo -e "${YELLOW}Añadiendo configuración para SOL_BOT en bot_config.py...${NC}"
         # Buscar la sección de configuración de bots y añadir SOL_BOT
-        sed -i '/BOT_CONFIGS = {/a \    "sol_bot_20m": {\n        "path": os.getenv("SOL_BOT_PATH"),\n        "log_file": os.getenv("SOL_BOT_LOG"),\n        "state_file": os.getenv("SOL_BOT_STATE"),\n        "type": "spot",\n        "symbol": "SOLUSDT",\n        "interval": "20m"\n    },' "$CONFIG_FILE"
+        sed -i '/BOT_CONFIGS = {/a \    "sol_bot_15m": {\n        "path": os.getenv("SOL_BOT_PATH"),\n        "log_file": os.getenv("SOL_BOT_LOG"),\n        "state_file": os.getenv("SOL_BOT_STATE"),\n        "type": "spot",\n        "symbol": "SOLUSDT",\n        "interval": "15m"\n    },' "$CONFIG_FILE"
     fi
 else
     echo -e "${RED}No se encontró el archivo de configuración de bots: $CONFIG_FILE${NC}"
