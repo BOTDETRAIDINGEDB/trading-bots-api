@@ -51,6 +51,21 @@ trading-bots-api/
 └── README.md                 # Este archivo
 ```
 
+## Bots Disponibles
+
+### SOL Bot 15m (Adaptativo)
+
+Bot de trading para Solana (SOL) con estrategia adaptativa, take profit dinámico y gestión inteligente del capital.
+
+- **Par**: SOLUSDT
+- **Intervalo**: 15 minutos
+- **Características**:
+  - **Take Profit Dinámico**: Se ajusta según volatilidad y tendencia del mercado
+  - **Stop Loss Fijo**: 6% del capital para protección contra movimientos bruscos
+  - **Gestión Inteligente del Capital**: Adaptación automática a cualquier balance disponible
+  - **Modo Aprendizaje**: Comienza con operaciones pequeñas y aumenta gradualmente
+  - **Notificaciones Mejoradas**: Informes detallados con iconos atractivos
+
 ## Uso
 
 ### Iniciar la API

@@ -5,6 +5,7 @@
 
 # Credenciales y configuraciones sensibles
 auth_config.json
+credentials.json
 *_credentials.json
 *_secrets.json
 *_keys.json
