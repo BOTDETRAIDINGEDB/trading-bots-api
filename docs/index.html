@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Bots API - Documentación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f8f8f8;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        pre {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .endpoint {
+            background-color: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get {
+            background-color: #61affe;
+            color: white;
+        }
+        .post {
+            background-color: #49cc90;
+            color: white;
+        }
+        .put {
+            background-color: #fca130;
+            color: white;
+        }
+        .delete {
+            background-color: #f93e3e;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trading Bots API</h1>
+    <p>Documentación de la API para gestionar y monitorear bots de trading de criptomonedas.</p>
+    
+    <h2>Autenticación</h2>
+    <p>La API utiliza autenticación JWT. Para acceder a las rutas protegidas, debes incluir un token en el encabezado <code>Authorization</code>:</p>
+    <pre>Authorization: Bearer &lt;token&gt;</pre>
+    
+    <h2>Endpoints</h2>
+    
+    <h3>Gestión de Bots</h3>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/bots</code>
+        <p>Obtiene la lista de todos los bots disponibles.</p>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "data": [
+    {
+      "id": "sol_bot_15m",
+      "name": "SOL Bot 15m",
+      "symbol": "SOLUSDT",
+      "interval": "15m",
+      "status": "active",
+      "last_update": "2025-05-26T08:00:00Z"
+    },
+    {
+      "id": "xrp_bot",
+      "name": "XRP Bot",
+      "symbol": "XRPUSDT",
+      "interval": "30m",
+      "status": "inactive",
+      "last_update": "2025-05-25T18:30:00Z"
+    }
+  ]
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/bots/{bot_id}</code>
+        <p>Obtiene información detallada de un bot específico.</p>
+        <h4>Parámetros de Ruta</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>bot_id</td>
+                <td>string</td>
+                <td>ID del bot a consultar</td>
+            </tr>
+        </table>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "data": {
+    "id": "sol_bot_15m",
+    "name": "SOL Bot 15m",
+    "symbol": "SOLUSDT",
+    "interval": "15m",
+    "status": "active",
+    "last_update": "2025-05-26T08:00:00Z",
+    "balance": 1000.0,
+    "profit_today": 12.5,
+    "profit_total": 150.75,
+    "trades_today": 3,
+    "trades_total": 42,
+    "win_rate": 0.68
+  }
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/bots/{bot_id}/start</code>
+        <p>Inicia un bot específico.</p>
+        <h4>Parámetros de Ruta</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>bot_id</td>
+                <td>string</td>
+                <td>ID del bot a iniciar</td>
+            </tr>
+        </table>
+        <h4>Parámetros de Cuerpo (Opcionales)</h4>
+        <pre>{
+  "simulation": true,
+  "balance": 1000
+}</pre>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "message": "Bot sol_bot_15m iniciado correctamente",
+  "data": {
+    "status": "active"
+  }
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/bots/{bot_id}/stop</code>
+        <p>Detiene un bot específico.</p>
+        <h4>Parámetros de Ruta</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>bot_id</td>
+                <td>string</td>
+                <td>ID del bot a detener</td>
+            </tr>
+        </table>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "message": "Bot sol_bot_15m detenido correctamente",
+  "data": {
+    "status": "inactive"
+  }
+}</pre>
+    </div>
+    
+    <h3>Webhooks</h3>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/webhooks/binance</code>
+        <p>Recibe notificaciones de Binance para actualizar el estado de los bots.</p>
+        <h4>Encabezados</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>X-Binance-Signature</td>
+                <td>Firma HMAC-SHA256 del cuerpo de la solicitud</td>
+            </tr>
+        </table>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "message": "Webhook procesado correctamente"
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/webhooks/telegram</code>
+        <p>Recibe comandos de Telegram para controlar los bots.</p>
+        <h4>Parámetros de Consulta</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>token</td>
+                <td>string</td>
+                <td>Token de autenticación para el webhook</td>
+            </tr>
+        </table>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "message": "Webhook procesado correctamente"
+}</pre>
+    </div>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span> <code>/api/webhooks/trading-view</code>
+        <p>Recibe señales de TradingView para ejecutar operaciones.</p>
+        <h4>Parámetros de Consulta</h4>
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>key</td>
+                <td>string</td>
+                <td>Clave de autenticación para el webhook</td>
+            </tr>
+        </table>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "message": "Webhook procesado correctamente"
+}</pre>
+    </div>
+    
+    <h3>Utilidades</h3>
+    
+    <div class="endpoint">
+        <span class="method get">GET</span> <code>/api/health</code>
+        <p>Verifica el estado de la API.</p>
+        <h4>Respuesta</h4>
+        <pre>{
+  "success": true,
+  "status": "ok",
+  "version": "1.0.0",
+  "uptime": "Desde 2025-05-26T08:00:00Z",
+  "environment": "production"
+}</pre>
+    </div>
+    
+    <h2>Códigos de Estado</h2>
+    <table>
+        <tr>
+            <th>Código</th>
+            <th>Descripción</th>
+        </tr>
+        <tr>
+            <td>200</td>
+            <td>OK - La solicitud se completó correctamente</td>
+        </tr>
+        <tr>
+            <td>400</td>
+            <td>Bad Request - La solicitud es incorrecta o malformada</td>
+        </tr>
+        <tr>
+            <td>401</td>
+            <td>Unauthorized - No se proporcionó autenticación o es inválida</td>
+        </tr>
+        <tr>
+            <td>403</td>
+            <td>Forbidden - No tienes permiso para acceder al recurso</td>
+        </tr>
+        <tr>
+            <td>404</td>
+            <td>Not Found - El recurso solicitado no existe</td>
+        </tr>
+        <tr>
+            <td>429</td>
+            <td>Too Many Requests - Has excedido el límite de solicitudes</td>
+        </tr>
+        <tr>
+            <td>500</td>
+            <td>Internal Server Error - Error interno del servidor</td>
+        </tr>
+    </table>
+    
+    <h2>Estructura de Respuesta</h2>
+    <p>Todas las respuestas de la API siguen una estructura común:</p>
+    <pre>{
+  "success": true|false,
+  "data": { ... },  // Solo en respuestas exitosas
+  "error": "...",   // Solo en respuestas de error
+  "message": "..."  // Mensaje descriptivo (opcional)
+}</pre>
+
+    <footer style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center;">
+        <p>Trading Bots API - Versión 1.0.0</p>
+        <p>&copy; 2025 BOTDETRAIDINGEDB. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

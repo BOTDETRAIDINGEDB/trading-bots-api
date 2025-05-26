@@ -1,0 +1,26 @@
+{
+    "host": "0.0.0.0",
+    "port": 5000,
+    "debug": false,
+    "allowed_origins": ["*"],
+    "log_level": "INFO",
+    "jwt_expiration_hours": 24,
+    "rate_limit": {
+        "enabled": true,
+        "requests_per_minute": 60
+    },
+    "bots": {
+        "sol_bot_15m": {
+            "name": "SOL Bot 15m",
+            "symbol": "SOLUSDT",
+            "interval": "15m",
+            "script_path": "../trading-bots/src/spot_bots/sol_bot_15m/main.py"
+        },
+        "xrp_bot": {
+            "name": "XRP Bot",
+            "symbol": "XRPUSDT",
+            "interval": "30m",
+            "script_path": "../trading-bots/src/spot_bots/xrp_bot/main.py"
+        }
+    }
+}
