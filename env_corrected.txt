@@ -11,12 +11,6 @@ JWT_SECRET=e4104c141d0557cd665a3f3d52dca7a2c731ee0ae34d502a4e6d3fe6e921cfdc
 BINANCE_API_KEY=5OOCkcopUwgAw4hG3I4XC8bOqPR7PZ2m7GHYebnY4DkH24iJG4Zzt8oebpcR2SYH
 BINANCE_API_SECRET=yEY9reiZM3YF2CVp5bbJFMgy2jQUmWUVER0MMCL3P5DFrkpzzh0eh6AMdmUR5BWf
 
-# Bot Paths
-XRP_BOT_PATH=C:\Users\EDISON\Documents\GitHub\trading-bots
-XRP_BOT_LOG=C:\Users\EDISON\Documents\GitHub\trading-bots\monitor.log
-XRP_BOT_STATE=C:\Users\EDISON\Documents\GitHub\trading-bots\src\spot_bots\xrp_bot\bot_state.json
-XRP_BOT_SIMULATION=C:\Users\EDISON\Documents\GitHub\trading-bots\src\spot_bots\xrp_bot\simulation_state.json
-
 # Configuración para el bot SOL con reentrenamiento
 SOL_BOT_PATH=C:\Users\EDISON\Documents\GitHub\trading-bots\src\spot_bots\sol_bot_15m
 SOL_BOT_LOG=C:\Users\EDISON\Documents\GitHub\trading-bots\src\spot_bots\sol_bot_15m\sol_bot_15min.log

@@ -81,12 +81,6 @@ JWT_SECRET=your_jwt_secret_here
 BINANCE_API_KEY=your_binance_api_key_here
 BINANCE_API_SECRET=your_binance_api_secret_here
 
-# Bot Paths
-XRP_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/xrp_bot
-XRP_BOT_LOG=$BASE_DIR/new-trading-bots/monitor.log
-XRP_BOT_STATE=$BASE_DIR/new-trading-bots/src/spot_bots/xrp_bot/bot_state_xrp_30m.json
-XRP_BOT_SIMULATION=$BASE_DIR/new-trading-bots/src/spot_bots/xrp_bot/simulation_state_xrp_30m.json
-
 # Configuración para el bot SOL con reentrenamiento
 SOL_BOT_PATH=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m
 SOL_BOT_LOG=$BASE_DIR/new-trading-bots/src/spot_bots/sol_bot_15m/sol_bot_15min.log

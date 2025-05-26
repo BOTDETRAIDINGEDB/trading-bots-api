@@ -28,14 +28,6 @@ def get_bots():
                 "interval": "15m",
                 "status": "active",
                 "last_update": "2025-05-26T08:00:00Z"
-            },
-            {
-                "id": "xrp_bot",
-                "name": "XRP Bot",
-                "symbol": "XRPUSDT",
-                "interval": "30m",
-                "status": "inactive",
-                "last_update": "2025-05-25T18:30:00Z"
             }
         ]
         
@@ -71,20 +63,6 @@ def get_bot(bot_id):
                 "trades_today": 3,
                 "trades_total": 42,
                 "win_rate": 0.68
-            },
-            "xrp_bot": {
-                "id": "xrp_bot",
-                "name": "XRP Bot",
-                "symbol": "XRPUSDT",
-                "interval": "30m",
-                "status": "inactive",
-                "last_update": "2025-05-25T18:30:00Z",
-                "balance": 500.0,
-                "profit_today": 0.0,
-                "profit_total": 75.25,
-                "trades_today": 0,
-                "trades_total": 28,
-                "win_rate": 0.64
             }
         }
         
