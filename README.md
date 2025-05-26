@@ -55,11 +55,74 @@ trading-bots-api/
 
 ### Iniciar la API
 
+#### Desarrollo Local
+
 ```bash
 python api/app.py
 ```
 
 Por defecto, la API se ejecutará en `http://0.0.0.0:5000`. Puedes configurar el host y puerto en el archivo `.env` o `config/api_config.json`.
+
+#### Producción (con systemd)
+
+En producción, la API está configurada como un servicio systemd y accesible a través de HTTPS:
+
+```bash
+# Iniciar el servicio
+sudo systemctl start trading-bots-api
+
+# Detener el servicio
+sudo systemctl stop trading-bots-api
+
+# Reiniciar el servicio
+sudo systemctl restart trading-bots-api
+
+# Ver el estado del servicio
+sudo systemctl status trading-bots-api
+
+# Ver los logs
+sudo journalctl -u trading-bots-api -f
+```
+
+La API está disponible en:
+
+```
+https://tradebotscentral.com/api/health
+```
+
+### Acceso desde Aplicaciones Externas
+
+La API puede ser accedida desde cualquier aplicación externa a través de HTTPS:
+
+```javascript
+// Ejemplo con JavaScript/Fetch
+fetch('https://tradebotscentral.com/api/bots', {
+  headers: {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```python
+# Ejemplo con Python/Requests
+import requests
+
+headers = {
+    'Authorization': 'Bearer YOUR_JWT_TOKEN'
+}
+
+response = requests.get('https://tradebotscentral.com/api/bots', headers=headers)
+data = response.json()
+print(data)
+```
+
+Esto permite integrar la API con:
+- Aplicaciones web personalizadas
+- Plataformas de automatización como Make (Integromat) o Zapier
+- Servicios de notificación (Telegram, Discord, etc.)
+- Dashboards de monitoreo
 
 ### Endpoints Principales
 
