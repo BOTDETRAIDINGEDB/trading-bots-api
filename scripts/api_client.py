@@ -13,7 +13,10 @@ import requests
 from pathlib import Path
 
 # Configuración
-API_BASE_URL = "https://tradebotscentral.com/api"
+# Usar variables de entorno con valores por defecto
+API_HOST = os.getenv('API_HOST', 'localhost')
+API_PORT = os.getenv('API_PORT', '5000')
+API_BASE_URL = f"http://{API_HOST}:{API_PORT}/api"
 CONFIG_FILE = Path(__file__).parent.parent / "auth_config.json"
 
 def load_config():
