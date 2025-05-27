@@ -50,7 +50,7 @@ def load_credentials():
         return None
 
 def update_auth_config():
-    """Actualiza el archivo auth_config.json con el token JWT de las credenciales"""
+    """Actualiza el archivo auth_config.json con el token JWT generado usando el JWT_SECRET"""
     credentials = load_credentials()
     if not credentials:
         return False
@@ -61,9 +61,35 @@ def update_auth_config():
         print("Error: JWT_SECRET no configurado en credentials.json")
         return False
     
+    # Importar jwt para generar el token
     try:
+        import jwt
+        from datetime import datetime, timedelta
+    except ImportError:
+        print("Error: Módulo JWT no encontrado. Instálalo con: pip install PyJWT")
+        return False
+    
+    # Generar un token JWT válido
+    try:
+        # Crear payload para el token
+        payload = {
+            'sub': 'api_client',
+            'role': 'admin',
+            'iat': datetime.utcnow(),
+            'exp': datetime.utcnow() + timedelta(days=30)  # Token válido por 30 días
+        }
+        
+        # Generar el token
+        token = jwt.encode(payload, jwt_secret, algorithm='HS256')
+        
+        # Si el token es bytes, convertirlo a string (depende de la versión de PyJWT)
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+        
+        # Guardar el token en auth_config.json
         with open(AUTH_CONFIG_FILE, 'w', encoding='utf-8') as f:
-            json.dump({"jwt_token": jwt_secret}, f, indent=4)
+            json.dump({"jwt_token": token}, f, indent=4)
+        
         print(f"Token JWT actualizado en {AUTH_CONFIG_FILE}")
         return True
     except Exception as e:
