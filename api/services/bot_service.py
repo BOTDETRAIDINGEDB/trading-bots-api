@@ -199,7 +199,7 @@ class BotService:
     
     def get_bot_status(self, bot_id):
         """
-        Obtiene el estado actual de un bot.
+        Obtiene el estado actual de un bot verificando si el proceso está en ejecución.
         
         Args:
             bot_id (str): ID del bot a consultar.
@@ -212,9 +212,33 @@ class BotService:
                 logger.warning(f"Bot no encontrado: {bot_id}")
                 return "unknown"
             
-            # En una implementación real, esto verificaría si el proceso del bot está en ejecución
-            # Por ahora, simplemente devolvemos un estado de ejemplo
-            return "active"
+            bot_config = self.bots_config[bot_id]
+            
+            # Verificar si el proceso del bot está en ejecución
+            # Buscamos el proceso por nombre (adaptive_main.py para el bot SOL)
+            process_name = "adaptive_main.py"
+            if bot_id == "sol_bot_15m":
+                process_name = "adaptive_main.py"
+            # Se pueden agregar más condiciones para otros tipos de bots
+            
+            # Ejecutar comando ps para verificar si el proceso está en ejecución
+            command = f"ps aux | grep '[p]ython3 {process_name}' | wc -l"
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout, stderr = process.communicate()
+            
+            # Convertir la salida a entero
+            try:
+                process_count = int(stdout.decode('utf-8').strip())
+            except ValueError:
+                process_count = 0
+            
+            # Si hay al menos un proceso en ejecución, el bot está activo
+            if process_count > 0:
+                logger.info(f"Bot {bot_id} está activo con {process_count} procesos en ejecución")
+                return "active"
+            else:
+                logger.info(f"Bot {bot_id} no está en ejecución")
+                return "inactive"
         except Exception as e:
             logger.error(f"Error al obtener estado del bot {bot_id}: {str(e)}")
             return "error"
