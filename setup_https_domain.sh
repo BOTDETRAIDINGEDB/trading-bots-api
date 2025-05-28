@@ -1,6 +1,7 @@
 #!/bin/bash
 # Script para configurar la API de Trading Bots con HTTPS y un dominio personalizado
-# Uso: ./setup_https_domain.sh tudominio.com
+# Uso: ./setup_https_domain.sh [tudominio.com]
+# Si no se proporciona un dominio, se usará tradebotscentral.com por defecto
 
 # Colores para mensajes
 GREEN='\033[0;32m'
@@ -8,14 +9,13 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Verificar que se proporcionó un dominio
+# Verificar si se proporcionó un dominio o usar el predeterminado
 if [ $# -eq 0 ]; then
-    echo -e "${RED}Error: Debes proporcionar un dominio.${NC}"
-    echo -e "Uso: $0 tudominio.com"
-    exit 1
+    DOMAIN="tradebotscentral.com"
+    echo -e "${YELLOW}No se proporcionó un dominio. Usando el dominio predeterminado: ${GREEN}$DOMAIN${NC}"
+else
+    DOMAIN=$1
 fi
-
-DOMAIN=$1
 echo -e "${GREEN}Configurando HTTPS para el dominio: ${YELLOW}$DOMAIN${NC}"
 
 # Verificar que el usuario tiene permisos de sudo
