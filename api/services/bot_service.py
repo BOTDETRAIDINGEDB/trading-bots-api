@@ -44,7 +44,7 @@ class BotService:
                         "symbol": "SOLUSDT",
                         "interval": "15m",
                         "path": "~/new-trading-bots/src/spot_bots/sol_bot_15m",
-                        "start_script": "start_enhanced.sh",
+                        "start_script": "start_bot.sh",
                         "stop_script": "stop.sh"
                     }
                 }
