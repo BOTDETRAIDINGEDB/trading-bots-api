@@ -33,6 +33,32 @@ API REST para gestionar y monitorear bots de trading de criptomonedas.
    - Crea un archivo `.env` basado en `.env.example`
    - Añade tus credenciales y configuraciones
 
+## Iniciar la API
+
+### Método Oficial (Recomendado)
+
+Utiliza el script oficial para iniciar la API:
+
+```bash
+./start_api.sh
+```
+
+Este script:
+- Verifica que estés en el directorio correcto
+- Comprueba si hay una instancia previa ejecutándose
+- Inicia la API en una sesión screen (si está disponible)
+- Proporciona instrucciones para monitorear los logs
+
+### Verificación
+
+Para comprobar que la API está funcionando correctamente:
+
+```bash
+curl http://localhost:5000/health
+```
+
+Deberías recibir un JSON con estado "ok" y la información de tiempo de ejecución.
+
 ## Estructura del Proyecto
 
 ```
