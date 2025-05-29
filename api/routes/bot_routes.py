@@ -200,26 +200,12 @@ def get_bot_positions(bot_id):
         if bot_id != "sol_bot_15m":
             return jsonify({"success": False, "error": "Bot no encontrado"}), 404
             
-        # En una implementación real, esto vendría del estado del bot o de una base de datos
-        # Aquí simulamos una posición activa para el bot SOL
-        positions = [
-            {
-                "id": "pos_12345",
-                "symbol": "SOLUSDT",
-                "type": "LONG",
-                "entry_price": 125.75,
-                "current_price": 127.80,
-                "quantity": 0.85,
-                "value_usdt": 108.63,
-                "profit_loss": 1.74,  # Porcentaje
-                "profit_loss_usdt": 1.89,
-                "entry_time": "2025-05-26T14:30:00Z",
-                "duration": "02:25:10",
-                "stop_loss": 118.21,  # 6% fijo como especificado
-                "take_profit": 132.04,  # Dinámico basado en volatilidad
-                "status": "active"
-            }
-        ]
+        # Obtener las posiciones reales del estado del bot
+        positions = bot_service.get_bot_positions(bot_id)
+        
+        # Si no hay posiciones, devolver una lista vacía
+        if not positions:
+            positions = []
         
         return jsonify({"success": True, "data": positions}), 200
     except Exception as e:

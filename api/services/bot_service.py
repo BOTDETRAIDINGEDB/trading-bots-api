@@ -242,3 +242,70 @@ class BotService:
         except Exception as e:
             logger.error(f"Error al obtener estado del bot {bot_id}: {str(e)}")
             return "error"
+    
+    def get_bot_positions(self, bot_id):
+        """
+        Obtiene las posiciones actualmente abiertas por un bot específico desde su archivo de estado.
+        
+        Args:
+            bot_id (str): ID del bot a consultar.
+            
+        Returns:
+            list: Lista de diccionarios con información de las posiciones activas.
+        """
+        try:
+            if bot_id not in self.bots_config:
+                logger.warning(f"Bot no encontrado: {bot_id}")
+                return []
+            
+            bot_config = self.bots_config[bot_id]
+            bot_path = os.path.expanduser(bot_config.get("path", ""))
+            
+            # Ruta al archivo de estado del bot
+            state_file = os.path.join(bot_path, "sol_bot_15min_state.json")
+            
+            if not os.path.exists(state_file):
+                logger.warning(f"Archivo de estado no encontrado: {state_file}")
+                return []
+            
+            # Leer el archivo de estado
+            with open(state_file, 'r') as f:
+                state = json.load(f)
+            
+            # Verificar si hay una posición abierta
+            if state.get("position", 0) <= 0:
+                logger.info(f"Bot {bot_id} no tiene posiciones abiertas")
+                return []
+            
+            # Calcular la duración de la posición
+            entry_time = state.get("entry_time", datetime.now().isoformat())
+            try:
+                entry_datetime = datetime.fromisoformat(entry_time.replace('Z', '+00:00'))
+                duration = datetime.now() - entry_datetime
+                duration_str = f"{duration.days * 24 + duration.seconds // 3600:02d}:{(duration.seconds % 3600) // 60:02d}:{duration.seconds % 60:02d}"
+            except Exception as e:
+                logger.error(f"Error al calcular duración de la posición: {str(e)}")
+                duration_str = "00:00:00"
+            
+            # Crear objeto de posición
+            position = {
+                "id": state.get("position_id", f"pos_{bot_id}_{int(datetime.now().timestamp())}"),
+                "symbol": state.get("symbol", ""),
+                "type": "LONG" if state.get("position", 0) > 0 else "SHORT",
+                "entry_price": state.get("entry_price", 0.0),
+                "current_price": state.get("current_price", 0.0),
+                "quantity": state.get("position_size", 0.0),
+                "value_usdt": state.get("position_amount", 0.0),
+                "profit_loss": state.get("current_profit_pct", 0.0),
+                "profit_loss_usdt": state.get("current_profit_usdt", 0.0),
+                "entry_time": entry_time,
+                "duration": duration_str,
+                "stop_loss": state.get("stop_loss", 0.0),
+                "take_profit": state.get("take_profit", 0.0),
+                "status": "active"
+            }
+            
+            return [position]
+        except Exception as e:
+            logger.error(f"Error al obtener posiciones del bot {bot_id}: {str(e)}")
+            return []
