@@ -135,49 +135,12 @@ def get_bot_signals(bot_id):
         if bot_id != "sol_bot_15m":
             return jsonify({"success": False, "error": "Bot no encontrado"}), 404
             
-        # En una implementación real, esto vendría del estado del bot o de una base de datos
-        # Aquí simulamos algunas señales para el bot SOL
-        signals = [
-            {
-                "timestamp": "2025-05-26T14:30:00Z",
-                "type": "BUY",
-                "price": 125.75,
-                "strength": 0.85,
-                "indicators": {
-                    "rsi": 32,
-                    "macd": "bullish",
-                    "bollinger": "lower_band"
-                },
-                "ml_prediction": 0.78,
-                "executed": True
-            },
-            {
-                "timestamp": "2025-05-26T12:00:00Z",
-                "type": "SELL",
-                "price": 128.50,
-                "strength": 0.72,
-                "indicators": {
-                    "rsi": 68,
-                    "macd": "bearish",
-                    "bollinger": "upper_band"
-                },
-                "ml_prediction": 0.35,
-                "executed": True
-            },
-            {
-                "timestamp": "2025-05-26T08:15:00Z",
-                "type": "BUY",
-                "price": 122.25,
-                "strength": 0.91,
-                "indicators": {
-                    "rsi": 28,
-                    "macd": "bullish",
-                    "bollinger": "lower_band"
-                },
-                "ml_prediction": 0.82,
-                "executed": True
-            }
-        ]
+        # Obtener las señales reales del bot
+        signals = bot_service.get_bot_signals(bot_id)
+        
+        # Si no hay señales, devolver una lista vacía
+        if not signals:
+            signals = []
         
         return jsonify({"success": True, "data": signals}), 200
     except Exception as e:

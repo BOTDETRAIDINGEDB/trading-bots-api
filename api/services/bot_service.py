@@ -309,3 +309,117 @@ class BotService:
         except Exception as e:
             logger.error(f"Error al obtener posiciones del bot {bot_id}: {str(e)}")
             return []
+            
+    def get_bot_signals(self, bot_id):
+        """
+        Obtiene las señales recientes generadas por un bot específico desde sus logs.
+        
+        Args:
+            bot_id (str): ID del bot a consultar.
+            
+        Returns:
+            list: Lista de diccionarios con información de las señales recientes.
+        """
+        try:
+            if bot_id not in self.bots_config:
+                logger.warning(f"Bot no encontrado: {bot_id}")
+                return []
+            
+            bot_config = self.bots_config[bot_id]
+            bot_path = os.path.expanduser(bot_config.get("path", ""))
+            
+            # Ruta al archivo de estado del bot
+            state_file = os.path.join(bot_path, "sol_bot_15min_state.json")
+            signals_file = os.path.join(bot_path, "signals.json")
+            
+            # Lista para almacenar las señales
+            signals = []
+            
+            # Verificar si existe el archivo de señales
+            if os.path.exists(signals_file):
+                try:
+                    with open(signals_file, 'r') as f:
+                        signals_data = json.load(f)
+                        if isinstance(signals_data, list):
+                            signals.extend(signals_data)
+                except Exception as e:
+                    logger.error(f"Error al leer archivo de señales: {str(e)}")
+            
+            # Si no hay archivo de señales o está vacío, intentar extraer señales del archivo de estado
+            if not signals and os.path.exists(state_file):
+                try:
+                    with open(state_file, 'r') as f:
+                        state = json.load(f)
+                    
+                    # Verificar si hay un historial de operaciones en el estado
+                    trades = state.get("trades", [])
+                    for trade in trades:
+                        # Convertir cada operación en una señal
+                        signal = {
+                            "timestamp": trade.get("entry_time", ""),
+                            "type": "BUY" if trade.get("type", "") == "LONG" else "SELL",
+                            "price": trade.get("entry_price", 0.0),
+                            "strength": trade.get("signal_strength", 0.5),
+                            "indicators": trade.get("indicators", {}),
+                            "ml_prediction": trade.get("ml_prediction", 0.5),
+                            "executed": True
+                        }
+                        signals.append(signal)
+                except Exception as e:
+                    logger.error(f"Error al extraer señales del estado: {str(e)}")
+            
+            # Si aún no hay señales, buscar en los logs
+            if not signals:
+                # Buscar archivos de log recientes
+                log_dir = os.path.join(bot_path, "logs")
+                if os.path.exists(log_dir):
+                    try:
+                        # Obtener el archivo de log más reciente
+                        log_files = [f for f in os.listdir(log_dir) if f.startswith(f"{bot_id}_cloud_simulation_") and f.endswith(".log")]
+                        if log_files:
+                            log_files.sort(reverse=True)  # Ordenar por nombre (que incluye la fecha)
+                            latest_log = os.path.join(log_dir, log_files[0])
+                            
+                            # Buscar líneas que contengan información de señales
+                            with open(latest_log, 'r') as f:
+                                log_lines = f.readlines()
+                            
+                            # Procesar las últimas 1000 líneas del log en busca de señales
+                            signal_lines = []
+                            for line in log_lines[-1000:]:
+                                if "SIGNAL" in line or "signal" in line.lower():
+                                    signal_lines.append(line)
+                            
+                            # Extraer información de las líneas de señales (simplificado)
+                            for i, line in enumerate(signal_lines[-10:]):  # Últimas 10 señales
+                                try:
+                                    # Extraer timestamp
+                                    timestamp_str = line.split("[")[1].split("]")[0] if "[" in line and "]" in line else ""
+                                    
+                                    # Determinar tipo de señal
+                                    signal_type = "BUY" if "BUY" in line or "LONG" in line else "SELL" if "SELL" in line or "SHORT" in line else "UNKNOWN"
+                                    
+                                    # Crear objeto de señal con información básica
+                                    signal = {
+                                        "timestamp": timestamp_str,
+                                        "type": signal_type,
+                                        "price": 0.0,  # No podemos extraer esto fácilmente del log
+                                        "strength": 0.5,  # Valor por defecto
+                                        "indicators": {},
+                                        "ml_prediction": 0.5,  # Valor por defecto
+                                        "executed": "executed" in line.lower() or "processed" in line.lower()
+                                    }
+                                    signals.append(signal)
+                                except Exception as e:
+                                    logger.error(f"Error al procesar línea de señal: {str(e)}")
+                    except Exception as e:
+                        logger.error(f"Error al procesar logs: {str(e)}")
+            
+            # Ordenar señales por timestamp (más recientes primero)
+            signals.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+            
+            # Limitar a las 10 señales más recientes
+            return signals[:10]
+        except Exception as e:
+            logger.error(f"Error al obtener señales del bot {bot_id}: {str(e)}")
+            return []
