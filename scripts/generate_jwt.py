@@ -3,6 +3,11 @@
 Generador de Token JWT para Trading Bots API
 --------------------------------------------
 Este script genera un token JWT válido para autenticación en la API.
+
+IMPORTANTE: Este script debe ejecutarse con python3, NO con python:
+    $ python3 scripts/generate_jwt.py
+
+En sistemas Linux/Unix, asegúrate de usar 'python3' explícitamente.
 """
 
 import json

@@ -49,6 +49,32 @@ Este script:
 - Inicia la API en una sesión screen (si está disponible)
 - Proporciona instrucciones para monitorear los logs
 
+## Autenticación
+
+### Generación de Tokens JWT
+
+Para autenticarte con la API, necesitas generar un token JWT válido. Usa el script incluido:
+
+```bash
+python3 scripts/generate_jwt.py
+```
+
+**IMPORTANTE:** En sistemas Linux/Unix, asegúrate de usar `python3` explícitamente, no `python`.
+
+El token generado se guarda en el archivo `auth_config.json` y expira en 24 horas.
+
+### Uso del Token JWT
+
+Para usar el token en tus solicitudes a la API:
+
+```bash
+# Leer el token generado
+TOKEN=$(cat auth_config.json | python3 -c "import sys, json; print(json.load(sys.stdin)['jwt_token'])")
+
+# Usar el token para consultar información
+curl -H "Authorization: Bearer $TOKEN" https://tradebotscentral.com/api/bots/sol_bot_15m
+```
+
 ### Verificación
 
 Para comprobar que la API está funcionando correctamente:
